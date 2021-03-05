@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:maxLines="40"
+            android:singleLine="false"
+            android:text="@string/heading2and"
+            android:textSize="30dp"
+              />
+
+        <ImageView
+
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/gate5" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/twoinputand" 
+            android:textSize="30sp"
+            />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/heador"
+            android:textSize="30dp" 
+             />
+
+        <ImageView
+
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/gate3" />
+
+        <TextView
+            
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/twoinputor" 
+            android:textSize="30sp"
+            />
+
+        <TextView
+            
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/headind2xor"
+            android:textSize="30dp" 
+             />
+
+        <ImageView
+
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/gate3" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/twoinputxor"
+            android:textSize="30sp" />
+
+        <TextView
+           
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/heading2xnor"
+            android:textSize="30dp"
+              />
+
+        <ImageView
+            android:id="@+id/imageDisplay1"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/gate2" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/twoinputxnor"
+            android:textSize="30sp" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/heading2nand"
+            android:textSize="30dp" 
+             
+            />
+
+        <ImageView
+            android:id="@+id/imageDisplay"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/gate6" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:textSize="30sp"/>
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/headinginvertor"
+            android:textSize="30dp" 
+             />
+
+        <ImageView
+            android:id="@+id/imageDisplay3"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/gate7" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/not" 
+            android:textSize="30sp"/>
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/heading4and"
+            android:textSize="30dp" 
+             />
+
+        <ImageView
+            android:id="@+id/imageDisplay5"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/fourgate5" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/twoinputand" 
+            android:textSize="30sp"/>
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/heading4or"
+            android:textSize="30dp" 
+             />
+
+        <ImageView
+            android:id="@+id/imageDisplay7"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/fourgate3" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/twoinputor" 
+            android:textSize="30sp"/>
+
+        <TextView
+            android:id="@+id/new_button9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/heading4xor"
+            android:textSize="30dp" 
+             />
+
+        <ImageView
+            android:id="@+id/imageDisplay10"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/fourgate1" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/twoinputxor" 
+            android:textSize="30sp"/>
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/heading4nand"
+            android:textSize="30dp"
+              />
+
+        <ImageView
+            android:id="@+id/imageDisplay12"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/fourgate6" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:textSize="30sp"/>
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/headingjknew"
+            android:textSize="30dp"
+              />
+
+        <ImageView
+            android:id="@+id/imageDisplay14"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/flipflop" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/jkflipflop" 
+            android:textSize="30sp"/>
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/headingsr"
+            android:textSize="30dp"
+              />
+
+
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/headingd"
+            android:textSize="30dp" 
+             />
+
+        <ImageView
+            android:id="@+id/imageDisplay18"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/dflipflop" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Dflipflop"
+            android:textSize="30sp" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/headindvc"
+            android:textSize="30dp" 
+             />
+
+        <ImageView
+            android:id="@+id/imageDisplay20"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/vcc" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/VCCvoltagesource"
+            android:textSize="30sp" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/headinggrnd"
+            android:textSize="30dp" />
+
+        <ImageView
+            android:id="@+id/imageDisplay22"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ground" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/groundsource" 
+            android:textSize="30sp"/>
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/headingled"
+            android:textSize="30dp" />
+
+        <ImageView
+            android:id="@+id/imageDisplay24"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ledon" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/l.e.d"
+            android:textSize="30sp" />
+
+        
+    </LinearLayout>
+
+</ScrollView>

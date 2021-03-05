@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+    
+    	<Button
+                android:id="@+id/sim"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/play" />
+
+              <Button
+            android:id="@+id/del"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/rem"
+            />
+              
+             <Button
+            android:id="@+id/save"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/sv"
+            />
+        
+        
+    	<HorizontalScrollView
+        android:id="@+id/horizontalScrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        	<LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            
+             
+            <Button
+                android:id="@+id/ext"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/extu" />
+
+            <Button
+                android:id="@+id/and"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/and2u" />
+
+            <Button
+                android:id="@+id/and4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/and4u" />
+
+            <Button
+                android:id="@+id/nand"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/nand2u" />
+
+            <Button
+                android:id="@+id/nand4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/nand4u" />
+
+            <Button
+                android:id="@+id/or"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/or2u" />
+
+            <Button
+                android:id="@+id/or4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/or4u" />
+
+            <Button
+                android:id="@+id/nor"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/nor2u" />
+
+            <Button
+                android:id="@+id/nor4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/nor4u" />
+
+            <Button
+                android:id="@+id/not"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/notu" />
+
+            <Button
+                android:id="@+id/xor"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/xor2u" />
+
+            <Button
+                android:id="@+id/xor4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/xor4u" />
+
+            <Button
+                android:id="@+id/xnor"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/xnor2u" />
+
+            <Button
+                android:id="@+id/xnor4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/xnor4u" />
+
+            <Button
+                android:id="@+id/led"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ledu" />
+
+            <Button
+                android:id="@+id/vcc"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/vccu" />
+
+            <Button
+                android:id="@+id/gnd"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/gndu" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    	</LinearLayout>
+    
+    <com.electrosim.simulation.SimContainer
+        android:id="@+id/surfaceView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

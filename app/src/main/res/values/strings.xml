@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">hello world, ImplebuttonActivity!</string>
+    <string name="app_name">ElectroSim</string>
+    <string name="button1">Help</string>
+    <string name="button2">saved circuit</string>
+    <string name="button3">about</string>
+    <string name="button4">create circuit</string>
+    <string name="heading">electrosim</string>
+    <string name="about_title">About</string>
+    <string name="about_text">Help section</string>
+    <string name="new_title">Help</string>
+    <string name="new_text"></string>
+    <string name="save_title">save Android ImplebuttonActivity</string>
+    <string name="save_text"></string>
+
+    <string name="create_text"></string>
+
+    <string name="info">ElectroSim: Logic Gates Simulator for Android Devices\n\n Developed By:\n\nAbdul Hannan</string>
+    <string name="twoinputand"> logic gate that simulates the function of the logical operator AND. It emits a signal only if all input wires receive coincident signals.
+AND Gate :This gate can have more than one input but only one output .Out is High when all the inputs are high as per positive logic . the expression for an and gate is y=A.B= A and B
+</string>
+    <string name="twoinputxnor">The output Q is true if either input A is true OR input B is true, but not when both of them are true: Q = (A AND NOT B) OR (B AND NOT A) 
+This is like an OR gate but excluding both inputs being true. 
+The output is true if inputs A and B are DIFFERENT. 
+EX-OR gates can only have 2 inputs. </string>
+<string name="twoinputxor">This is like an OR gate but excluding both inputs being true. 
+The output is true if inputs A and B are DIFFERENT. 
+EX-OR gates can only have 2 inputs.</string>
+    <string name="not">The output Q is true when the input A is NOT true, the output is the inverse of the input: Q = NOT A .A NOT gate can only have one input. A NOT gate is also called an inverter</string>
+    <string name="twoinputor">OR gate : an OR gate has more then one input but only one output . Output is one if any of the onput of OR gate is 1 (high ).An or gate is represented by y=A+B (this is case of 2 input OR gate )</string>
+    <string name="fourinputandand"> logic gate that simulates the function of the logical operator AND. It emits a signal only if all input wires receive coincident signals.
+AND Gate :This gate can have more than one input but only one output .Out is High when all the inputs are high as per positive logic . the expression for an and gate is y=A.B= A and B
+</string>
+    <string name="fourinputor">an OR gate has more then one input but only one output . Output is one if any of the onput of OR gate is 1 (high ).An or gate is represented by y=A+B </string>
+    
+    <string name="SRflipflop"> (Or "RS flip-flop") A "set/reset" flip-flop in which activating the "S" input will switch it to one stable state and activating the "R" input will switch it to the other state. 
+The outputs of a basic SR flip-flop change whenever its R or S inputs change appropriately. A clocked SR flip-flop has an extra clock input which enables or disables the other two inputs. When they are disabled the outputs remain constant. </string>
+    <string name="jkflipflop">The J-K flip-flop is the most versatile of the basic flip-flops. It has the input- following character of the clocked D flip-flop but has two inputs,traditionally labeled J and K. If J and K are different then the output Q takes the value of J at the next clock edge.</string>
+    <string name="Dflipflop"> A digital logic device that stores the status of its "D" input whenever its clock input makes a certain transition (low to high or high to low). The output, "Q", shows the currently stored value. 
+Compare J-K flip-flop. </string>
+    <string name="groundsource">In electrical engineering, ground or earth can refer to the reference point in an electrical circuit from which other voltages are measured, or a common return path for electric current, or a direct physical connection to the Earth.
+
+
+A typical earthing electrode (left), consisting of a conductive rod driven into the ground, at a home in Australia. Electrical codes specify that earthing wires must be a certain color, to prevent wiring errors.
+Electrical circuits may be connected to ground (earth) for several reasons. In mains powered equipment, exposed metal parts are connected to ground to prevent user contact with dangerous voltage if electrical insulation fails. Connections to ground limit the build-up of static electricity when handling flammable products or electrostatic-sensitive devices.</string>
+    <string name="VCCvoltagesource">An electronics designation that refers to voltage from a power supply connected to the "collector" terminal of a bipolar transistor. In an NPN bipolar (BJT) transistor, it would be +Vcc, while in a PNP transistor, it would be -Vcc.Double letters (cc) refer to power supply voltages. For example, Vee refers to the "emitter" voltage. In CMOS logic, Vss refers to the "source" voltage, and Vdd is the "drain" voltage.Single letters refer to the voltage relative to ground; for example, Vc is the "collector" voltage relative to ground. Two different letters indicate the voltage between two terminals; for example: Vbe is the "base" to "emitter" voltage drop, while Vce is the "collector" to "emitter" voltage.</string>
+    <string name="l.e.d">Light emitting diodes are diodes(electronic components that let electricity pass in only one direction) that emit visible light when electricity is applied, much like a light bulb. When many LEDs are side-by-side, they can create pictures, such as the scrolling red LED signs found everywhere.</string>
+    <string name="sevensegmentdisplay">fhfgnfjgf</string>
+    <string name="heading2and">2 INPUT AND</string>
+    <string name="heading2or">two input OR</string>
+    <string name="headind2xor">TWO INPUT XOR</string>
+    <string name="heading2xnor">TWO INPUT XNOR</string>
+    <string name="heading2nand">TWO INPUT NAND</string>
+    <string name="headinginvertor">INVERTOR</string>
+    <string name="heading4and">FOUR INPUT AND</string>
+    <string name="heading4or">FOUR INPUT OR</string>
+    <string name="heading4xor">FOUR INPUT XOR</string>
+    <string name="headingjk">J-K FLIP FLOP</string>
+    <string name="headingsr">S-R FLIP FLOP</string>
+    <string name="heading4nand">FOUR INPUT NAND</string>
+    <string name="headingjknew">J-K FLIP FLOP</string>
+    <string name="headingd">D FLIP FLOP</string>
+    <string name="headindvc">VCC VOLTAGE SOURCE</string>
+    <string name="headinggrnd">GROUND SOURCE</string>
+    <string name="headingled">L.E.D</string>
+    <string name="headingseven">SEVEN SEGMENT DISPLAY</string>
+    <string name="heador">TWO INPUT OR</string>
+</resources>

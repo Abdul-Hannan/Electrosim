@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+
+     >
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_marginBottom="20dp" >
+
+     <Button
+         android:id="@+id/create_button"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_weight="1.00"
+         android:background="@drawable/new1" />
+
+     <Button
+         android:id="@+id/save_button"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_weight="1.00"
+         android:background="@drawable/saved" />
+
+ </LinearLayout>
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="20dp" >
+
+     <Button
+         android:id="@+id/about_button"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_weight="1.00"
+         android:background="@drawable/about" />
+
+     <Button
+         android:id="@+id/new_button"
+         style="@style/button1"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_weight="1.00"
+         android:background="@drawable/help" />
+
+ </LinearLayout>
+
+</LinearLayout>
