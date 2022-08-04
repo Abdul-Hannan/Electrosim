@@ -83,3 +83,7 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+.DS_Store
+.idea/compiler.xml
+.idea/deploymentTargetDropDown.xml
+.idea/misc.xml
