@@ -62,6 +62,6 @@ class Extension(
     }
     
     override fun createNew(): ElementInterface {
-        return Extension(x, y, container, portcountinput, res)
+        return Extension(posX, posY, container, portcountinput, res)
     }
 } 

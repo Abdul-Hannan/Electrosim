@@ -21,7 +21,7 @@ class NotGate(
     x: Float,
     y: Float,
     container: Container,
-    private val portcountinput: Int,
+    private val portcountinput: Int = 1,
     private val res: Resources
 ) : SimElement(container) {
     
@@ -60,6 +60,6 @@ class NotGate(
     }
     
     override fun createNew(): ElementInterface {
-        return NotGate(x, y, container, portcountinput, res)
+        return NotGate(posX, posY, container, portcountinput, res)
     }
 } 

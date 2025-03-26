@@ -74,6 +74,6 @@ class XorGate(
     }
     
     override fun createNew(): ElementInterface {
-        return XorGate(x, y, container, portcountinput, res)
+        return XorGate(posX, posY, container, portcountinput, res)
     }
 } 

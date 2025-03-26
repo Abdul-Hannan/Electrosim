@@ -60,35 +60,47 @@ class SimContainer : Container, Runnable {
 
     override fun run() {
         for (el in mElements) {
-            (el as SimElement).prepareToStart()
+            if (el is SimElement) {
+                el.prepareToStart()
+            }
         }
         
         for (cn in mConnectors) {
-            (cn as SimConnector).prepareToStart()
+            if (cn is SimConnector) {
+                cn.prepareToStart()
+            }
         }
 
         while (checkthread) {
             synchronized(mElements) {
                 for (ele in mElements) {
-                    (ele as SimElement).simulate()
+                    if (ele is SimElement) {
+                        ele.simulate()
+                    }
                 }
 
                 for (con in mConnectors) {
-                    (con as SimConnector).simulate()
+                    if (con is SimConnector) {
+                        con.simulate()
+                    }
                 }
             }
         }
 
         for (el in mElements) {
-            (el as SimElement).prepareToStop()
+            if (el is SimElement) {
+                el.prepareToStop()
+            }
         }
         
         for (cn in mConnectors) {
-            (cn as SimConnector).prepareToStop()
+            if (cn is SimConnector) {
+                cn.prepareToStop()
+            }
         }
     }
 
-    override fun insertElement(element: ElementInterface) {
+    fun insertElementSim(element: ElementInterface) {
         if (!checkthread)
             super.insertElement(element)
     }

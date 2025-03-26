@@ -21,7 +21,7 @@ class Led(
     x: Float,
     y: Float,
     container: Container,
-    private val portcountinput: Int,
+    private val portcountinput: Int = 1,
     private val res: Resources
 ) : SimElement(container) {
     
@@ -61,6 +61,6 @@ class Led(
     }
     
     override fun createNew(): ElementInterface {
-        return Led(x, y, container, portcountinput, res)
+        return Led(posX, posY, container, portcountinput, res)
     }
 } 

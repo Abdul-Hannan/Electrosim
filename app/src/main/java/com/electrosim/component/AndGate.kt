@@ -66,6 +66,6 @@ class AndGate(
     }
     
     override fun createNew(): ElementInterface {
-        return AndGate(x, y, container, portcountinput, res)
+        return AndGate(posX, posY, container, portcountinput, res)
     }
 } 

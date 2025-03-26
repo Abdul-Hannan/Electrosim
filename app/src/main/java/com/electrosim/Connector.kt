@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 
-class Connector : ConnectorInterface {
+open class Connector : ConnectorInterface {
     protected var pointA: LinkPointInterface? = null
     protected var pointB: LinkPointInterface? = null
     var point1: LineBreakpoint? = null
@@ -34,64 +34,64 @@ class Connector : ConnectorInterface {
     }
 
     override fun draw(canvas: Canvas) {
-        pointA?.let { pointA ->
-            pointB?.let { pointB ->
-                draw(canvas, paint)
-            }
+        val localPointA = pointA
+        val localPointB = pointB
+        if (localPointA != null && localPointB != null) {
+            draw(canvas, paint)
         }
     }
 
-    protected fun draw(canvas: Canvas, paint: Paint) {
-        pointA?.let { pointA ->
-            pointB?.let { pointB ->
-                var currentlb = LineBreakpoint(pointA.getX(), pointA.getY(), this)
-                
-                for (lb in breakpoints) {
-                    canvas.drawLine(currentlb.x, currentlb.y, lb.x, lb.y, paint)
-                    currentlb = lb
-                }
-                
-                canvas.drawLine(currentlb.x, currentlb.y, pointB.getX(), pointB.getY(), paint)
+    open fun draw(canvas: Canvas, paint: Paint) {
+        val localPointA = pointA
+        val localPointB = pointB
+        if (localPointA != null && localPointB != null) {
+            var currentlb = LineBreakpoint(localPointA.getX(), localPointA.getY(), this)
+            
+            for (lb in breakpoints) {
+                canvas.drawLine(currentlb.x, currentlb.y, lb.x, lb.y, paint)
+                currentlb = lb
             }
+            
+            canvas.drawLine(currentlb.x, currentlb.y, localPointB.getX(), localPointB.getY(), paint)
         }
     }
     
     override fun pointOnLine(currentX: Float, currentY: Float): Boolean {
-        pointA?.let { pointA ->
-            pointB?.let { pointB ->
-                var currentlb = LineBreakpoint(pointA.getX(), pointA.getY(), this)
-                
-                for (lb in breakpoints) {
-                    val deltaX = lb.x - currentlb.x
-                    if (deltaX != 0f) {
-                        val m = (lb.y - currentlb.y) / deltaX
-                        val b = currentlb.y - (m * currentlb.x)
-                        
-                        if (currentY == ((m * currentX) + b)) {
-                            return true
-                        }
-                    } else if (currentX == currentlb.x && 
-                               currentY >= minOf(currentlb.y, lb.y) && 
-                               currentY <= maxOf(currentlb.y, lb.y)) {
-                        return true
-                    }
-                    
-                    currentlb = lb
-                }
-                
-                val deltaX = pointB.getX() - currentlb.x
+        val localPointA = pointA
+        val localPointB = pointB
+        if (localPointA != null && localPointB != null) {
+            var currentlb = LineBreakpoint(localPointA.getX(), localPointA.getY(), this)
+            
+            for (lb in breakpoints) {
+                val deltaX = lb.x - currentlb.x
                 if (deltaX != 0f) {
-                    val m = (pointB.getY() - currentlb.y) / deltaX
+                    val m = (lb.y - currentlb.y) / deltaX
                     val b = currentlb.y - (m * currentlb.x)
                     
                     if (currentY == ((m * currentX) + b)) {
                         return true
                     }
                 } else if (currentX == currentlb.x && 
-                           currentY >= minOf(currentlb.y, pointB.getY()) && 
-                           currentY <= maxOf(currentlb.y, pointB.getY())) {
+                           currentY >= minOf(currentlb.y, lb.y) && 
+                           currentY <= maxOf(currentlb.y, lb.y)) {
                     return true
                 }
+                
+                currentlb = lb
+            }
+            
+            val deltaX = localPointB.getX() - currentlb.x
+            if (deltaX != 0f) {
+                val m = (localPointB.getY() - currentlb.y) / deltaX
+                val b = currentlb.y - (m * currentlb.x)
+                
+                if (currentY == ((m * currentX) + b)) {
+                    return true
+                }
+            } else if (currentX == currentlb.x && 
+                       currentY >= minOf(currentlb.y, localPointB.getY()) && 
+                       currentY <= maxOf(currentlb.y, localPointB.getY())) {
+                return true
             }
         }
         
@@ -99,8 +99,9 @@ class Connector : ConnectorInterface {
     }
     
     override fun draw(canvas: Canvas, currentX: Float, currentY: Float) {
-        pointA?.let { pointA ->
-            var currentlb = LineBreakpoint(pointA.getX(), pointA.getY(), this)
+        val localPointA = pointA
+        if (localPointA != null) {
+            var currentlb = LineBreakpoint(localPointA.getX(), localPointA.getY(), this)
             
             for (lb in breakpoints) {
                 canvas.drawLine(currentlb.x, currentlb.y, lb.x, lb.y, paint)

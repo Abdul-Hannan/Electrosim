@@ -5,21 +5,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
+import com.electrosim.databinding.Main3Binding
 
 class MainMenu : Activity(), OnClickListener {
+    private lateinit var binding: Main3Binding
 
     /** Called when the activity is first created.  */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main3)
-        val continueButton = findViewById<View>(R.id.new_button)
-        continueButton.setOnClickListener(this)
-        val newButton = findViewById<View>(R.id.save_button)
-        newButton.setOnClickListener(this)
-        val aboutButton = findViewById<View>(R.id.about_button)
-        aboutButton.setOnClickListener(this)
-        val exitButton = findViewById<View>(R.id.create_button)
-        exitButton.setOnClickListener(this)
+        
+        // Initialize ViewBinding
+        binding = Main3Binding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
+        // Set click listeners
+        binding.newButton.setOnClickListener(this)
+        binding.saveButton.setOnClickListener(this)
+        binding.aboutButton.setOnClickListener(this)
+        binding.createButton.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {

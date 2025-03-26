@@ -20,7 +20,7 @@ class Ground(
     x: Float,
     y: Float,
     container: Container,
-    private val portcountinput: Int,
+    private val portcountinput: Int = 1,
     private val res: Resources
 ) : SimElement(container) {
     
@@ -43,6 +43,6 @@ class Ground(
     }
     
     override fun createNew(): ElementInterface {
-        return Ground(x, y, container, portcountinput, res)
+        return Ground(posX, posY, container, portcountinput, res)
     }
 } 

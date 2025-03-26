@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.GridView
+import com.electrosim.databinding.Main2Binding
 
 class GridViewActivity : Activity() {
-    private lateinit var gridView: GridView
+    private lateinit var binding: Main2Binding
 
     companion object {
         private val MOBILE_OS = arrayOf("circuit1", "circuit2", "circuit3", "circuit2")
@@ -17,12 +18,14 @@ class GridViewActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main2)
+        
+        // Initialize ViewBinding
+        binding = Main2Binding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        gridView = findViewById(R.id.gridView1)
-        gridView.adapter = ImageAdapter(this, MOBILE_OS)
+        binding.gridView1.adapter = ImageAdapter(this, MOBILE_OS)
 
-        gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
+        binding.gridView1.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
             val intent = Intent(baseContext, CircuitDrawer::class.java)
             startActivity(intent)
         }

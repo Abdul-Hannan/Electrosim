@@ -73,6 +73,6 @@ class OrGate(
     }
     
     override fun createNew(): ElementInterface {
-        return OrGate(x, y, container, portcountinput, res)
+        return OrGate(posX, posY, container, portcountinput, res)
     }
 } 

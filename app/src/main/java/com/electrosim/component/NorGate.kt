@@ -76,6 +76,6 @@ class NorGate(
     }
     
     override fun createNew(): ElementInterface {
-        return NorGate(x, y, container, portcountinput, res)
+        return NorGate(posX, posY, container, portcountinput, res)
     }
 } 

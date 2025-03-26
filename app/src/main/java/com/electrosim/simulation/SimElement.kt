@@ -24,9 +24,9 @@ abstract class SimElement(container: Container) : Element(container) {
         // Empty implementation
     }
 
-    protected abstract fun simulate()
+    abstract fun simulate()
     
-    protected open fun prepareToStart() {
+    open fun prepareToStart() {
         for (ip in inputPorts) {
             ip.prepareToStart()
         }
@@ -36,7 +36,7 @@ abstract class SimElement(container: Container) : Element(container) {
         }
     }
     
-    protected open fun prepareToStop() {
+    open fun prepareToStop() {
         for (ip in inputPorts) {
             ip.prepareToStop()
         }

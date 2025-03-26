@@ -76,6 +76,6 @@ class NandGate(
     }
     
     override fun createNew(): ElementInterface {
-        return NandGate(x, y, container, portcountinput, res)
+        return NandGate(posX, posY, container, portcountinput, res)
     }
 } 

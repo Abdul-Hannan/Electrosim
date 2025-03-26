@@ -15,8 +15,8 @@ abstract class Element(protected val container: Container) : ElementInterface {
     private var hover: Boolean = false
     private lateinit var mBitmap: Bitmap
     protected val paint: Paint = Paint()
-    protected var x: Float = 0f
-    protected var y: Float = 0f
+    protected var posX: Float = 0f
+    protected var posY: Float = 0f
 
     protected fun initiailizeElement(bitmap: Bitmap, x: Float, y: Float): ElementInterface {
         mBitmap = bitmap
@@ -27,8 +27,8 @@ abstract class Element(protected val container: Container) : ElementInterface {
         paint.color = Color.RED
         paint.style = Paint.Style.STROKE
 
-        this.x = x
-        this.y = y
+        this.posX = x
+        this.posY = y
         return this
     }
 
@@ -72,18 +72,18 @@ abstract class Element(protected val container: Container) : ElementInterface {
     }
 
     override fun translate(deltaX: Float, deltaY: Float) {
-        this.x += deltaX
-        this.y += deltaY
+        this.posX += deltaX
+        this.posY += deltaY
         
-        mX = x - mWidth / 2
-        mY = y - mHeight / 2
+        mX = posX - mWidth / 2
+        mY = posY - mHeight / 2
     }
 
     override fun getX(): Float {
-        return x
+        return posX
     }
 
     override fun getY(): Float {
-        return y
+        return posY
     }
 } 

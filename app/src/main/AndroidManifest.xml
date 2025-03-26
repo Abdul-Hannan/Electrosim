@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.electrosim"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -9,7 +8,8 @@
         android:label="@string/app_name" >
         <activity
             android:name=".SplashScreen"
-             android:screenOrientation="landscape">
+            android:exported="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -17,23 +17,29 @@
         </activity>
         <activity
             android:name=".CircuitDrawer"
-             android:screenOrientation="landscape">
+            android:exported="false"
+            android:screenOrientation="landscape">
         </activity>
         <activity
             android:name=".MainMenu"
+            android:exported="false"
             android:screenOrientation="landscape">
         </activity>
         <activity
             android:name=".About"
+            android:exported="false"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Dialog">
         </activity>
         <activity
             android:name=".Help"
+            android:exported="false"
             android:screenOrientation="landscape">
         </activity>
         <activity 
-            android:name=".GridViewActivity" android:screenOrientation="landscape"></activity>
+            android:name=".GridViewActivity" 
+            android:exported="false"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ import android.view.MotionEvent
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class LinkPoint(
+open class LinkPoint(
     private val x: Float,
     private val y: Float,
     private val radius: Float,
@@ -28,7 +28,7 @@ class LinkPoint(
         return false
     }
     
-    override fun setConnector(connector: ConnectorInterface) {
+    override fun setConnector(connector: ConnectorInterface?) {
         this.connector = connector
     }
 

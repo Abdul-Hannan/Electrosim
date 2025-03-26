@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
+import com.electrosim.databinding.SplashBinding
 
 class SplashScreen : Activity() {
 
@@ -13,16 +14,18 @@ class SplashScreen : Activity() {
     /** Called when the activity is first created.  */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.splash)
+        val binding = SplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val splashScreen = this
 
         // Thread for displaying the SplashScreen
         splashThread = object : Thread() {
+            @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
             override fun run() {
                 try {
                     synchronized(this) {
-                        wait(splashTime.toLong())
+                        (this as java.lang.Object).wait(splashTime.toLong())
                     }
                 } catch (e: InterruptedException) {
                     // Do nothing
@@ -37,10 +40,11 @@ class SplashScreen : Activity() {
         splashThread.start()
     }
 
+    @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             synchronized(splashThread) {
-                splashThread.notifyAll()
+                (splashThread as java.lang.Object).notifyAll()
             }
         }
         return true

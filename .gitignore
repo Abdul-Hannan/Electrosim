@@ -87,3 +87,43 @@ lint/tmp/
 .idea/compiler.xml
 .idea/deploymentTargetDropDown.xml
 .idea/misc.xml
+
+# Heap dump files
+*.hprof
+
+# Crashlytics
+crashlytics.properties
+crashlytics-build.properties
+com_crashlytics_export_strings.xml
+fabric.properties
+
+# Android Profiling
+*.trace
+
+# macOS specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Temporary files
+*~
+*.tmp
+*.bak
+*.swp
+
+# IDE specific files
+.project
+.classpath
+.settings/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+.idea/jarRepositories.xml
+.idea/runConfigurations.xml
+
+# Kotlin
+.kotlin/
+
+# Crash reports
+hs_err_pid*

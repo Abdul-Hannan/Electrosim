@@ -13,7 +13,7 @@ import com.electrosim.LinkPointInterface
  * @author Abdul Hannan
  * 
  */
-class SimConnector : Connector() {
+open class SimConnector : Connector() {
     private lateinit var portA: OutputPort
     private lateinit var portB: InputPort
     private var data: Any? = null
@@ -70,7 +70,7 @@ class SimConnector : Connector() {
 
     override fun draw(canvas: Canvas) {
         if (flaghigh) {
-            draw(canvas, simPaint)
+            super.draw(canvas, simPaint)
         } else {
             super.draw(canvas)
         }

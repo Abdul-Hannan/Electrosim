@@ -167,11 +167,13 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                                 connectorFactory?.let { factory ->
                                     newConnector = factory.createConnector()
                                     
-                                    if (newConnector?.setLinkPointA(it) == true) {
-                                        it.setConnector(newConnector)
-                                        tempLinkPoint = null
-                                    } else {
-                                        newConnector = null
+                                    newConnector?.let { connector ->
+                                        if (connector.setLinkPointA(it)) {
+                                            it.setConnector(connector)
+                                            tempLinkPoint = null
+                                        } else {
+                                            newConnector = null
+                                        }
                                     }
                                 }
                             }
@@ -184,25 +186,26 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                 
                 MotionEvent.ACTION_UP -> {
                     if (!delflag) {
-                        tempLinkPoint?.let {
-                            newConnector?.let { connector ->
-                                if (connector.setLinkPointB(it)) {
-                                    it.setConnector(connector)
-                                    mConnectors.add(connector)
-                                    newConnector = null
-                                }
+                        if (tempLinkPoint != null && newConnector != null) {
+                            val lp = tempLinkPoint
+                            val connector = newConnector
+                            if (lp != null && connector != null && connector.setLinkPointB(lp)) {
+                                lp.setConnector(connector)
+                                mConnectors.add(connector)
+                                newConnector = null
                             }
                             tempLinkPoint = null
-                        } ?: run {
-                            newConnector?.let {
+                        } else if (newConnector != null) {
+                            val connector = newConnector
+                            if (connector != null) {
                                 timetracker2 = System.currentTimeMillis()
                                 
                                 if ((timetracker2 - timetracker1) > 5000) {
-                                    it.getLinkPointA().setConnector(null)
+                                    connector.getLinkPointA().setConnector(null)
                                     newConnector = null
                                 } else {
                                     timetracker1 = timetracker2
-                                    it.addLinkBreakpoint(LineBreakpoint(event.x, event.y, it))
+                                    connector.addLinkBreakpoint(LineBreakpoint(event.x, event.y, connector))
                                 }
                             }
                         }

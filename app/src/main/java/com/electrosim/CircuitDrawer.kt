@@ -11,6 +11,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import com.electrosim.component.*
+import com.electrosim.databinding.MainBinding
 import com.electrosim.simulation.SimConnectorFactory
 import com.electrosim.simulation.SimContainer
 
@@ -18,14 +19,18 @@ class CircuitDrawer : Activity(), View.OnClickListener {
     private val btElementMap = HashMap<Int, ElementInterface>()
     private lateinit var container: Container
     private var simtoggle = false
+    private lateinit var binding: MainBinding
 
     /** Called when the activity is first created.  */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.main)
         
-        container = findViewById(R.id.surfaceView1)
+        // Initialize ViewBinding
+        binding = MainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
+        container = binding.surfaceView1
         container.connectorFactory = SimConnectorFactory()
         
         // Setup button click listeners
@@ -41,7 +46,7 @@ class CircuitDrawer : Activity(), View.OnClickListener {
         }
         
         // Simulation control button
-        findViewById<Button>(R.id.sim).setOnClickListener { v ->
+        binding.sim.setOnClickListener { v ->
             val simContainer = container as SimContainer
             if (simContainer.isRunning()) {
                 simContainer.stop()
@@ -53,12 +58,12 @@ class CircuitDrawer : Activity(), View.OnClickListener {
         }
         
         // Save button
-        findViewById<Button>(R.id.save).setOnClickListener {
+        binding.save.setOnClickListener {
             showDiag()
         }
         
         // Delete mode button
-        findViewById<Button>(R.id.del).setOnClickListener {
+        binding.del.setOnClickListener {
             container.delflag = !container.delflag
         }
         
@@ -104,8 +109,10 @@ class CircuitDrawer : Activity(), View.OnClickListener {
         alert.setView(input)
         
         alert.setPositiveButton("Ok") { _, _ ->
-            val value = input.text
-            // Do something with value!
+            // Store circuit name from input instead of declaring unused variable
+            val circuitName = input.text.toString()
+            // Use the circuit name - for now just log it
+            Log.d("CircuitDrawer", "Circuit name: $circuitName")
         }
         
         alert.setNegativeButton("Cancel") { _, _ ->
