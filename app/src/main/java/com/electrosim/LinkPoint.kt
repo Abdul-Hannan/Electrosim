@@ -32,6 +32,10 @@ open class LinkPoint(
         this.connector = connector
     }
 
+    override fun hasConnector(): Boolean {
+        return connector != null
+    }
+
     override fun getY(): Float {
         return container.getY() + y
     }

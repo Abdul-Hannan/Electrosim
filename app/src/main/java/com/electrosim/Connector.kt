@@ -61,41 +61,48 @@ open class Connector : ConnectorInterface {
         val localPointB = pointB
         if (localPointA != null && localPointB != null) {
             var currentlb = LineBreakpoint(localPointA.getX(), localPointA.getY(), this)
-            
+
+            // Check each line segment
             for (lb in breakpoints) {
-                val deltaX = lb.x - currentlb.x
-                if (deltaX != 0f) {
-                    val m = (lb.y - currentlb.y) / deltaX
-                    val b = currentlb.y - (m * currentlb.x)
-                    
-                    if (currentY == ((m * currentX) + b)) {
-                        return true
-                    }
-                } else if (currentX == currentlb.x && 
-                           currentY >= minOf(currentlb.y, lb.y) && 
-                           currentY <= maxOf(currentlb.y, lb.y)) {
+                if (distanceToLineSegment(currentX, currentY, currentlb.x, currentlb.y, lb.x, lb.y) <= TAP_TOLERANCE) {
                     return true
                 }
-                
                 currentlb = lb
             }
-            
-            val deltaX = localPointB.getX() - currentlb.x
-            if (deltaX != 0f) {
-                val m = (localPointB.getY() - currentlb.y) / deltaX
-                val b = currentlb.y - (m * currentlb.x)
-                
-                if (currentY == ((m * currentX) + b)) {
-                    return true
-                }
-            } else if (currentX == currentlb.x && 
-                       currentY >= minOf(currentlb.y, localPointB.getY()) && 
-                       currentY <= maxOf(currentlb.y, localPointB.getY())) {
+
+            // Check final segment to pointB
+            if (distanceToLineSegment(currentX, currentY, currentlb.x, currentlb.y, localPointB.getX(), localPointB.getY()) <= TAP_TOLERANCE) {
                 return true
             }
         }
-        
+
         return false
+    }
+
+    companion object {
+        private const val TAP_TOLERANCE = 30f // Pixels tolerance for tapping on a line
+    }
+
+    private fun distanceToLineSegment(px: Float, py: Float, x1: Float, y1: Float, x2: Float, y2: Float): Float {
+        val dx = x2 - x1
+        val dy = y2 - y1
+        val lengthSquared = dx * dx + dy * dy
+
+        if (lengthSquared == 0f) {
+            // Line segment is a point
+            return kotlin.math.sqrt((px - x1) * (px - x1) + (py - y1) * (py - y1))
+        }
+
+        // Calculate projection of point onto line segment
+        var t = ((px - x1) * dx + (py - y1) * dy) / lengthSquared
+        t = maxOf(0f, minOf(1f, t)) // Clamp to [0, 1] to stay within segment
+
+        // Find closest point on segment
+        val closestX = x1 + t * dx
+        val closestY = y1 + t * dy
+
+        // Return distance to closest point
+        return kotlin.math.sqrt((px - closestX) * (px - closestX) + (py - closestY) * (py - closestY))
     }
     
     override fun draw(canvas: Canvas, currentX: Float, currentY: Float) {
@@ -115,8 +122,23 @@ open class Connector : ConnectorInterface {
     override fun getLinkPointA(): LinkPointInterface {
         return pointA ?: throw IllegalStateException("pointA is not initialized")
     }
-    
+
     override fun getLinkPointB(): LinkPointInterface {
         return pointB ?: throw IllegalStateException("pointB is not initialized")
+    }
+
+    override fun drawGlow(canvas: Canvas, glowPaint: Paint) {
+        val localPointA = pointA
+        val localPointB = pointB
+        if (localPointA != null && localPointB != null) {
+            var currentlb = LineBreakpoint(localPointA.getX(), localPointA.getY(), this)
+
+            for (lb in breakpoints) {
+                canvas.drawLine(currentlb.x, currentlb.y, lb.x, lb.y, glowPaint)
+                currentlb = lb
+            }
+
+            canvas.drawLine(currentlb.x, currentlb.y, localPointB.getX(), localPointB.getY(), glowPaint)
+        }
     }
 } 

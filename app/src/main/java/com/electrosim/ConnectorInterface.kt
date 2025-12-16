@@ -16,6 +16,7 @@ interface ConnectorInterface {
     fun getLinkPointB(): LinkPointInterface
     fun draw(canvas: Canvas)
     fun draw(canvas: Canvas, currentX: Float, currentY: Float)
+    fun drawGlow(canvas: Canvas, glowPaint: android.graphics.Paint)
     fun addLinkBreakpoint(point: LineBreakpoint)
     fun pointOnLine(currentX: Float, currentY: Float): Boolean
 } 
