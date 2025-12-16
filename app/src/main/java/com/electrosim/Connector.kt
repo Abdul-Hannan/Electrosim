@@ -17,10 +17,25 @@ open class Connector : ConnectorInterface {
         isAntiAlias = true
     }
 
-    val breakpoints: MutableList<LineBreakpoint> = ArrayList()
+    private val breakpointPaint = Paint().apply {
+        color = Color.WHITE
+        style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+
+    private val breakpointStrokePaint = Paint().apply {
+        color = Color.rgb(100, 149, 237) // Cornflower blue
+        style = Paint.Style.STROKE
+        strokeWidth = 2f
+        isAntiAlias = true
+    }
+
+    private val _breakpoints: MutableList<LineBreakpoint> = ArrayList()
+
+    override fun getBreakpoints(): List<LineBreakpoint> = _breakpoints
     
     override fun addLinkBreakpoint(point: LineBreakpoint) {
-        breakpoints.add(point)
+        _breakpoints.add(point)
     }
 
     override fun setLinkPointA(lp: LinkPointInterface): Boolean {
@@ -46,13 +61,19 @@ open class Connector : ConnectorInterface {
         val localPointB = pointB
         if (localPointA != null && localPointB != null) {
             var currentlb = LineBreakpoint(localPointA.getX(), localPointA.getY(), this)
-            
-            for (lb in breakpoints) {
+
+            for (lb in _breakpoints) {
                 canvas.drawLine(currentlb.x, currentlb.y, lb.x, lb.y, paint)
                 currentlb = lb
             }
-            
+
             canvas.drawLine(currentlb.x, currentlb.y, localPointB.getX(), localPointB.getY(), paint)
+
+            // Draw visual circles at breakpoints
+            for (lb in _breakpoints) {
+                canvas.drawCircle(lb.x, lb.y, BREAKPOINT_RADIUS, breakpointPaint)
+                canvas.drawCircle(lb.x, lb.y, BREAKPOINT_RADIUS, breakpointStrokePaint)
+            }
         }
     }
     
@@ -63,7 +84,7 @@ open class Connector : ConnectorInterface {
             var currentlb = LineBreakpoint(localPointA.getX(), localPointA.getY(), this)
 
             // Check each line segment
-            for (lb in breakpoints) {
+            for (lb in _breakpoints) {
                 if (distanceToLineSegment(currentX, currentY, currentlb.x, currentlb.y, lb.x, lb.y) <= TAP_TOLERANCE) {
                     return true
                 }
@@ -81,6 +102,7 @@ open class Connector : ConnectorInterface {
 
     companion object {
         private const val TAP_TOLERANCE = 30f // Pixels tolerance for tapping on a line
+        private const val BREAKPOINT_RADIUS = 12f // Visual radius of breakpoint circles
     }
 
     private fun distanceToLineSegment(px: Float, py: Float, x1: Float, y1: Float, x2: Float, y2: Float): Float {
@@ -109,13 +131,19 @@ open class Connector : ConnectorInterface {
         val localPointA = pointA
         if (localPointA != null) {
             var currentlb = LineBreakpoint(localPointA.getX(), localPointA.getY(), this)
-            
-            for (lb in breakpoints) {
+
+            for (lb in _breakpoints) {
                 canvas.drawLine(currentlb.x, currentlb.y, lb.x, lb.y, paint)
                 currentlb = lb
             }
-            
+
             canvas.drawLine(currentlb.x, currentlb.y, currentX, currentY, paint)
+
+            // Draw visual circles at breakpoints during wire creation
+            for (lb in _breakpoints) {
+                canvas.drawCircle(lb.x, lb.y, BREAKPOINT_RADIUS, breakpointPaint)
+                canvas.drawCircle(lb.x, lb.y, BREAKPOINT_RADIUS, breakpointStrokePaint)
+            }
         }
     }
     
@@ -133,7 +161,7 @@ open class Connector : ConnectorInterface {
         if (localPointA != null && localPointB != null) {
             var currentlb = LineBreakpoint(localPointA.getX(), localPointA.getY(), this)
 
-            for (lb in breakpoints) {
+            for (lb in _breakpoints) {
                 canvas.drawLine(currentlb.x, currentlb.y, lb.x, lb.y, glowPaint)
                 currentlb = lb
             }
