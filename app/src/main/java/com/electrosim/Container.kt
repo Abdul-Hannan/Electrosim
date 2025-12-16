@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.electrosim.simulation.InputPort
 import com.electrosim.simulation.OutputPort
 import com.electrosim.simulation.SimElement
 import java.util.ArrayList
@@ -38,6 +39,8 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
     private val connectButtonPaint: Paint = Paint()
     private val portHighlightPaint: Paint = Paint()
     private val portHighlightFillPaint: Paint = Paint()
+    private val inputPortHighlightPaint: Paint = Paint()
+    private val inputPortHighlightFillPaint: Paint = Paint()
     private val textPaint: Paint = Paint()
 
     // Long press detection for showing connect button
@@ -54,6 +57,20 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
         }
     }
 
+    // Long press detection for creating breakpoints during wire drawing
+    private var breakpointLongPressX: Float = 0f
+    private var breakpointLongPressY: Float = 0f
+    private var breakpointLongPressTriggered: Boolean = false
+    private val breakpointLongPressRunnable = Runnable {
+        if (newConnector != null && !breakpointLongPressTriggered) {
+            breakpointLongPressTriggered = true
+            newConnector?.addLinkBreakpoint(LineBreakpoint(breakpointLongPressX, breakpointLongPressY, newConnector!!))
+        }
+    }
+
+    // Breakpoint dragging state
+    private var draggingBreakpoint: LineBreakpoint? = null
+
     // Delete mode glow animation
     private var glowAnimationTime: Long = 0
     private val deleteGlowPaint: Paint = Paint()
@@ -66,6 +83,8 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
         private const val LONG_PRESS_THRESHOLD_MS = 1000L
         private const val LONG_PRESS_MOVE_TOLERANCE = 20f
         private const val GLOW_ANIMATION_PERIOD_MS = 1000L
+        private const val BREAKPOINT_RADIUS = 12f
+        private const val BREAKPOINT_TAP_RADIUS = 25f
     }
     
     constructor(context: Context) : super(context) {
@@ -96,6 +115,15 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
         // Port highlight fill paint (semi-transparent green)
         portHighlightFillPaint.color = Color.argb(80, 76, 175, 80)
         portHighlightFillPaint.style = Paint.Style.FILL
+
+        // Input port highlight stroke paint (orange outline)
+        inputPortHighlightPaint.color = Color.rgb(255, 152, 0) // Orange
+        inputPortHighlightPaint.style = Paint.Style.STROKE
+        inputPortHighlightPaint.strokeWidth = 4f
+
+        // Input port highlight fill paint (semi-transparent orange)
+        inputPortHighlightFillPaint.color = Color.argb(80, 255, 152, 0)
+        inputPortHighlightFillPaint.style = Paint.Style.FILL
 
         // Text paint for button label
         textPaint.color = Color.WHITE
@@ -151,6 +179,21 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
 
             newConnector?.let {
                 it.draw(canvas, currentPointerX, currentPointerY)
+
+                // Draw highlighted InputPorts on all other elements while wire is being drawn
+                for (element in mElements) {
+                    if (element is SimElement) {
+                        val availableInputPorts = element.getAvailableInputPorts()
+                        for (port in availableInputPorts) {
+                            val portX = port.getX()
+                            val portY = port.getY()
+                            // Draw filled circle
+                            canvas.drawCircle(portX, portY, PORT_HIGHLIGHT_RADIUS, inputPortHighlightFillPaint)
+                            // Draw outline
+                            canvas.drawCircle(portX, portY, PORT_HIGHLIGHT_RADIUS, inputPortHighlightPaint)
+                        }
+                    }
+                }
             }
 
             // Draw Connect button only after long press on a component with available output ports
@@ -262,6 +305,19 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
         return null
     }
 
+    private fun getBreakpointAt(x: Float, y: Float): LineBreakpoint? {
+        for (connector in mConnectors) {
+            val breakpoints = connector.getBreakpoints()
+            for (breakpoint in breakpoints) {
+                val dist = sqrt((x - breakpoint.x).pow(2) + (y - breakpoint.y).pow(2))
+                if (dist <= BREAKPOINT_TAP_RADIUS) {
+                    return breakpoint
+                }
+            }
+        }
+        return null
+    }
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
         Log.d("TEST1", "E - $event :: ${event.edgeFlags}")
 
@@ -269,6 +325,15 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
             when (event.action) {
                 MotionEvent.ACTION_MOVE -> {
                     if (!delflag) {
+                        // Handle breakpoint dragging
+                        if (draggingBreakpoint != null) {
+                            draggingBreakpoint?.x = event.x
+                            draggingBreakpoint?.y = event.y
+                            currentPointerX = event.x
+                            currentPointerY = event.y
+                            return@synchronized
+                        }
+
                         // Check if moved too far for long press detection (element)
                         if (longPressElement != null && !showConnectButton) {
                             val moveDistance = sqrt(
@@ -279,6 +344,22 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                                 // Moved too far, cancel long press detection
                                 longPressHandler.removeCallbacks(longPressRunnable)
                                 longPressElement = null
+                            }
+                        }
+
+                        // Check if moved too far for breakpoint long press detection
+                        if (newConnector != null && !breakpointLongPressTriggered) {
+                            val moveDistance = sqrt(
+                                (event.x - breakpointLongPressX).pow(2) +
+                                (event.y - breakpointLongPressY).pow(2)
+                            )
+                            if (moveDistance > LONG_PRESS_MOVE_TOLERANCE) {
+                                // Moved too far, cancel breakpoint long press and update position
+                                longPressHandler.removeCallbacks(breakpointLongPressRunnable)
+                                breakpointLongPressX = event.x
+                                breakpointLongPressY = event.y
+                                // Restart long press timer at new position
+                                longPressHandler.postDelayed(breakpointLongPressRunnable, LONG_PRESS_THRESHOLD_MS)
                             }
                         }
 
@@ -301,6 +382,17 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                 }
 
                 MotionEvent.ACTION_DOWN -> {
+                    // Check if a breakpoint is being tapped for dragging
+                    if (!delflag && newConnector == null) {
+                        val breakpoint = getBreakpointAt(event.x, event.y)
+                        if (breakpoint != null) {
+                            draggingBreakpoint = breakpoint
+                            currentPointerX = event.x
+                            currentPointerY = event.y
+                            return@synchronized
+                        }
+                    }
+
                     // Check if we're in connection mode and a highlighted port was tapped
                     val highlightedPort = getHighlightedPortAt(event.x, event.y)
                     if (highlightedPort != null) {
@@ -314,6 +406,11 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                                     connectionModeElement = null
                                     showConnectButton = false
                                     longPressElement = null
+                                    // Start breakpoint long press detection
+                                    breakpointLongPressX = event.x
+                                    breakpointLongPressY = event.y
+                                    breakpointLongPressTriggered = false
+                                    longPressHandler.postDelayed(breakpointLongPressRunnable, LONG_PRESS_THRESHOLD_MS)
                                 } else {
                                     newConnector = null
                                 }
@@ -375,37 +472,16 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                             longPressHandler.postDelayed(longPressRunnable, LONG_PRESS_THRESHOLD_MS)
                         }
 
+                        // Element selection (without starting connections from link points)
                         if (e != currentElement && currentElement != null) {
                             currentElement?.deSelect(event)
                             if (e != null) {
                                 currentElement = e
-                                tempLinkPoint = currentElement?.select(event)
                             } else {
                                 currentElement = null
                             }
                         } else if (currentElement == null && e != null) {
                             currentElement = e
-                            tempLinkPoint = currentElement?.select(event)
-                        }
-
-                        tempLinkPoint?.let {
-                            currentElement = null
-                            if (newConnector == null) {
-                                timetracker1 = System.currentTimeMillis()
-
-                                connectorFactory?.let { factory ->
-                                    newConnector = factory.createConnector()
-
-                                    newConnector?.let { connector ->
-                                        if (connector.setLinkPointA(it)) {
-                                            it.setConnector(connector)
-                                            tempLinkPoint = null
-                                        } else {
-                                            newConnector = null
-                                        }
-                                    }
-                                }
-                            }
                         }
                     }
 
@@ -414,11 +490,21 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                 }
 
                 MotionEvent.ACTION_UP -> {
+                    // Release breakpoint dragging
+                    if (draggingBreakpoint != null) {
+                        draggingBreakpoint = null
+                        return@synchronized
+                    }
+
                     // Cancel long press detection if finger lifted before threshold
                     if (longPressElement != null && !showConnectButton) {
                         longPressHandler.removeCallbacks(longPressRunnable)
                         longPressElement = null
                     }
+
+                    // Cancel breakpoint long press detection
+                    longPressHandler.removeCallbacks(breakpointLongPressRunnable)
+                    breakpointLongPressTriggered = false
 
                     if (!delflag) {
                         if (tempLinkPoint != null && newConnector != null) {
@@ -428,6 +514,9 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                                 lp.setConnector(connector)
                                 mConnectors.add(connector)
                                 newConnector = null
+                                // Cancel breakpoint long press since connection is complete
+                                longPressHandler.removeCallbacks(breakpointLongPressRunnable)
+                                breakpointLongPressTriggered = false
                             }
                             tempLinkPoint = null
                         } else if (newConnector != null) {
@@ -438,10 +527,10 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                                 if ((timetracker2 - timetracker1) > 5000) {
                                     connector.getLinkPointA().setConnector(null)
                                     newConnector = null
-                                } else {
-                                    timetracker1 = timetracker2
-                                    connector.addLinkBreakpoint(LineBreakpoint(event.x, event.y, connector))
                                 }
+                                // Breakpoints are now created via long press, not tap
+                                // Just reset the timer for connection timeout
+                                timetracker1 = timetracker2
                             }
                         }
                     }
@@ -507,13 +596,28 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
         delflag = enabled
         if (enabled) {
             glowAnimationTime = System.currentTimeMillis()
-            // Clear other modes when entering delete mode
-            connectionModeElement = null
-            showConnectButton = false
+            synchronized(mElements) {
+                // Cancel any in-progress connection
+                newConnector?.let { connector ->
+                    try {
+                        connector.getLinkPointA().setConnector(null)
+                    } catch (_: IllegalStateException) {
+                        // pointA may not be initialized yet
+                    }
+                    newConnector = null
+                }
+                tempLinkPoint = null
+                // Clear other modes when entering delete mode
+                connectionModeElement = null
+                showConnectButton = false
+                longPressElement = null
+                draggingBreakpoint = null
+                breakpointLongPressTriggered = false
+                currentElement?.deSelect(MotionEvent.obtain(0, 0, MotionEvent.ACTION_UP, 0f, 0f, 0))
+                currentElement = null
+            }
             longPressHandler.removeCallbacks(longPressRunnable)
-            longPressElement = null
-            currentElement?.deSelect(MotionEvent.obtain(0, 0, MotionEvent.ACTION_UP, 0f, 0f, 0))
-            currentElement = null
+            longPressHandler.removeCallbacks(breakpointLongPressRunnable)
         }
     }
 } 

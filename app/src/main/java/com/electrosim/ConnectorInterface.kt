@@ -19,4 +19,5 @@ interface ConnectorInterface {
     fun drawGlow(canvas: Canvas, glowPaint: android.graphics.Paint)
     fun addLinkBreakpoint(point: LineBreakpoint)
     fun pointOnLine(currentX: Float, currentY: Float): Boolean
+    fun getBreakpoints(): List<LineBreakpoint>
 } 
