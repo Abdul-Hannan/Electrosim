@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -39,11 +41,18 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
     private val textPaint: Paint = Paint()
 
     // Long press detection for showing connect button
-    private var longPressStartTime: Long = 0
     private var longPressElement: ElementInterface? = null
     private var showConnectButton: Boolean = false
     private var longPressStartX: Float = 0f
     private var longPressStartY: Float = 0f
+    private val longPressHandler = Handler(Looper.getMainLooper())
+    private val longPressRunnable = Runnable {
+        if (longPressElement != null && !showConnectButton) {
+            showConnectButton = true
+            currentElement?.deSelect(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
+            currentElement = null
+        }
+    }
 
     // Delete mode glow animation
     private var glowAnimationTime: Long = 0
@@ -54,7 +63,7 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
         private const val CONNECT_BUTTON_OFFSET_X = 60f
         private const val CONNECT_BUTTON_OFFSET_Y = -60f
         private const val PORT_HIGHLIGHT_RADIUS = 25f
-        private const val LONG_PRESS_THRESHOLD_MS = 500L
+        private const val LONG_PRESS_THRESHOLD_MS = 1000L
         private const val LONG_PRESS_MOVE_TOLERANCE = 20f
         private const val GLOW_ANIMATION_PERIOD_MS = 1000L
     }
@@ -268,8 +277,8 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                             )
                             if (moveDistance > LONG_PRESS_MOVE_TOLERANCE) {
                                 // Moved too far, cancel long press detection
+                                longPressHandler.removeCallbacks(longPressRunnable)
                                 longPressElement = null
-                                longPressStartTime = 0
                             }
                         }
 
@@ -284,14 +293,6 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                             } else {
                                 null
                             }
-                        }
-
-                        // Check for long press threshold while holding (element)
-                        if (longPressElement != null && !showConnectButton &&
-                            System.currentTimeMillis() - longPressStartTime >= LONG_PRESS_THRESHOLD_MS) {
-                            showConnectButton = true
-                            currentElement?.deSelect(event)
-                            currentElement = null
                         }
 
                         currentPointerX = event.x
@@ -342,6 +343,7 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                     }
                     if (showConnectButton) {
                         showConnectButton = false
+                        longPressHandler.removeCallbacks(longPressRunnable)
                         longPressElement = null
                     }
 
@@ -367,9 +369,10 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                         // Start long press detection if touching an element
                         if (e != null && e is SimElement) {
                             longPressElement = e
-                            longPressStartTime = System.currentTimeMillis()
                             longPressStartX = event.x
                             longPressStartY = event.y
+                            // Schedule long press callback
+                            longPressHandler.postDelayed(longPressRunnable, LONG_PRESS_THRESHOLD_MS)
                         }
 
                         if (e != currentElement && currentElement != null) {
@@ -411,10 +414,10 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    // Reset long press detection if finger lifted before threshold (element)
+                    // Cancel long press detection if finger lifted before threshold
                     if (longPressElement != null && !showConnectButton) {
+                        longPressHandler.removeCallbacks(longPressRunnable)
                         longPressElement = null
-                        longPressStartTime = 0
                     }
 
                     if (!delflag) {
@@ -507,6 +510,7 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
             // Clear other modes when entering delete mode
             connectionModeElement = null
             showConnectButton = false
+            longPressHandler.removeCallbacks(longPressRunnable)
             longPressElement = null
             currentElement?.deSelect(MotionEvent.obtain(0, 0, MotionEvent.ACTION_UP, 0f, 0f, 0))
             currentElement = null
