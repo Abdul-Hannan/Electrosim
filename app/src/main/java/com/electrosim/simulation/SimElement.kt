@@ -19,6 +19,14 @@ abstract class SimElement(container: Container) : Element(container) {
         outputPorts.add(o)
         addLinkPoint(o)
     }
+
+    fun getAvailableOutputPorts(): List<OutputPort> {
+        return outputPorts.filter { !it.hasConnector() }
+    }
+
+    fun getAvailableInputPorts(): List<InputPort> {
+        return inputPorts.filter { !it.hasConnector() }
+    }
     
     fun run() {
         // Empty implementation
