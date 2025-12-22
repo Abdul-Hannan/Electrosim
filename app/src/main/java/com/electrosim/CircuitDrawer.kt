@@ -14,6 +14,7 @@ import com.electrosim.component.*
 import com.electrosim.databinding.MainBinding
 import com.electrosim.simulation.SimConnectorFactory
 import com.electrosim.simulation.SimContainer
+import com.electrosim.storage.CircuitData
 import com.electrosim.storage.CircuitSerializer
 import com.electrosim.storage.CircuitStorageManager
 
@@ -25,11 +26,13 @@ class CircuitDrawer : Activity(), View.OnClickListener {
     private lateinit var storageManager: CircuitStorageManager
     private lateinit var circuitSerializer: CircuitSerializer
 
-    // Track if we're editing an existing circuit
+    // Track current circuit state
     private var currentCircuitId: String? = null
+    private var currentCircuitName: String = DEFAULT_CIRCUIT_NAME
 
     companion object {
         const val EXTRA_CIRCUIT_ID = "circuit_id"
+        const val DEFAULT_CIRCUIT_NAME = "Unnamed Circuit"
     }
 
     /** Called when the activity is first created.  */
@@ -116,7 +119,16 @@ class CircuitDrawer : Activity(), View.OnClickListener {
         currentCircuitId = intent.getStringExtra(EXTRA_CIRCUIT_ID)
         if (currentCircuitId != null) {
             loadCircuit(currentCircuitId!!)
+        } else {
+            // New circuit - set default name
+            updateCircuitNameDisplay()
         }
+    }
+
+    private fun updateCircuitNameDisplay() {
+        binding.circuitNameLabel.text = currentCircuitName
+        // Show "Saved" status if this is a saved circuit
+        binding.circuitStatus.text = if (currentCircuitId != null) "(Saved)" else ""
     }
 
     private fun showSaveDialog() {
@@ -135,12 +147,10 @@ class CircuitDrawer : Activity(), View.OnClickListener {
         val input = EditText(this)
         input.hint = "My Circuit"
 
-        // If editing existing circuit, try to get its name
-        currentCircuitId?.let { id ->
-            storageManager.loadCircuit(id)?.let { existingCircuit ->
-                input.setText(existingCircuit.name)
-            }
-        }
+        // Pre-fill with current circuit name
+        input.setText(currentCircuitName)
+        // Select all text for easy replacement
+        input.selectAll()
 
         alert.setView(input)
 
@@ -166,8 +176,29 @@ class CircuitDrawer : Activity(), View.OnClickListener {
             val elements = container.getElements()
             val connectors = container.getConnectors()
 
-            // Serialize the circuit
-            val circuitData = circuitSerializer.serializeCircuit(name, elements, connectors)
+            // Check if we're updating an existing circuit or creating new
+            val circuitData: CircuitData
+            val isUpdate = currentCircuitId != null
+
+            if (isUpdate) {
+                // Load existing circuit to preserve ID and creation date
+                val existingCircuit = storageManager.loadCircuit(currentCircuitId!!)
+                if (existingCircuit != null) {
+                    // Update existing circuit with new data
+                    circuitData = circuitSerializer.serializeCircuit(name, elements, connectors)
+                        .copy(
+                            id = existingCircuit.id,
+                            createdAt = existingCircuit.createdAt,
+                            updatedAt = System.currentTimeMillis()
+                        )
+                } else {
+                    // Circuit was deleted, create new
+                    circuitData = circuitSerializer.serializeCircuit(name, elements, connectors)
+                }
+            } else {
+                // Create new circuit
+                circuitData = circuitSerializer.serializeCircuit(name, elements, connectors)
+            }
 
             // Capture thumbnail
             val thumbnail = container.captureCircuitBitmap()
@@ -177,7 +208,11 @@ class CircuitDrawer : Activity(), View.OnClickListener {
 
             if (success) {
                 currentCircuitId = circuitData.id
-                Toast.makeText(this, "Circuit saved successfully!", Toast.LENGTH_SHORT).show()
+                currentCircuitName = name
+                updateCircuitNameDisplay()
+
+                val message = if (isUpdate) "Circuit updated!" else "Circuit saved!"
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                 Log.d("CircuitDrawer", "Circuit saved: ${circuitData.id}")
             } else {
                 Toast.makeText(this, "Failed to save circuit", Toast.LENGTH_SHORT).show()
@@ -199,6 +234,11 @@ class CircuitDrawer : Activity(), View.OnClickListener {
             // Deserialize and load
             val (elements, connectors) = circuitSerializer.deserializeCircuit(circuitData)
             container.loadCircuit(elements, connectors)
+
+            // Update circuit tracking
+            currentCircuitId = circuitData.id
+            currentCircuitName = circuitData.name
+            updateCircuitNameDisplay()
 
             Toast.makeText(this, "Loaded: ${circuitData.name}", Toast.LENGTH_SHORT).show()
             Log.d("CircuitDrawer", "Circuit loaded: ${circuitData.name}")

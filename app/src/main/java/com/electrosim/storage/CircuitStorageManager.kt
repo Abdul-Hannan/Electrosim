@@ -128,6 +128,30 @@ class CircuitStorageManager(private val context: Context) {
         return saveCircuit(updatedCircuit, thumbnail)
     }
 
+    /**
+     * Duplicate a circuit with a new name and ID
+     */
+    fun duplicateCircuit(circuitId: String, newName: String): CircuitData? {
+        return try {
+            val originalCircuit = loadCircuit(circuitId) ?: return null
+            val originalThumbnail = getThumbnail(circuitId)
+
+            val now = System.currentTimeMillis()
+            val duplicatedCircuit = originalCircuit.copy(
+                id = java.util.UUID.randomUUID().toString(),
+                name = newName,
+                createdAt = now,
+                updatedAt = now
+            )
+
+            val success = saveCircuit(duplicatedCircuit, originalThumbnail)
+            if (success) duplicatedCircuit else null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
     // JSON Serialization
 
     private fun circuitToJson(circuit: CircuitData): JSONObject {

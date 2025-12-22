@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
@@ -30,11 +31,15 @@ class SavedCircuitsActivity : Activity() {
         circuitsList = findViewById(R.id.circuits_list)
         emptyState = findViewById(R.id.empty_state)
 
-        // Setup adapter
+        // Setup adapter with both delete and duplicate callbacks
         val circuits = storageManager.getAllCircuits()
-        adapter = SavedCircuitsAdapter(this, circuits, storageManager) { circuit ->
-            showDeleteConfirmation(circuit)
-        }
+        adapter = SavedCircuitsAdapter(
+            context = this,
+            circuits = circuits,
+            storageManager = storageManager,
+            onDeleteClick = { circuit -> showDeleteConfirmation(circuit) },
+            onDuplicateClick = { circuit -> showDuplicateDialog(circuit) }
+        )
         circuitsList.adapter = adapter
 
         // Handle item click to open circuit
@@ -102,6 +107,45 @@ class SavedCircuitsActivity : Activity() {
             refreshCircuits()
         } else {
             Toast.makeText(this, "Failed to delete circuit", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showDuplicateDialog(circuit: CircuitData) {
+        val alert = AlertDialog.Builder(this)
+
+        alert.setTitle("Duplicate Circuit")
+        alert.setMessage("Enter name for the duplicate:")
+
+        val input = EditText(this)
+        input.hint = "Circuit name"
+        // Suggest a default name
+        input.setText("${circuit.name} (Copy)")
+        input.selectAll()
+
+        alert.setView(input)
+
+        alert.setPositiveButton("Duplicate") { _, _ ->
+            val newName = input.text.toString().trim()
+            if (newName.isEmpty()) {
+                Toast.makeText(this, "Please enter a circuit name", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            duplicateCircuit(circuit, newName)
+        }
+
+        alert.setNegativeButton("Cancel", null)
+
+        alert.show()
+    }
+
+    private fun duplicateCircuit(circuit: CircuitData, newName: String) {
+        val duplicated = storageManager.duplicateCircuit(circuit.id, newName)
+        if (duplicated != null) {
+            Toast.makeText(this, "Circuit duplicated", Toast.LENGTH_SHORT).show()
+            refreshCircuits()
+        } else {
+            Toast.makeText(this, "Failed to duplicate circuit", Toast.LENGTH_SHORT).show()
         }
     }
 }
