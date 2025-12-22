@@ -36,7 +36,7 @@ class MainMenu : Activity(), OnClickListener {
                 startActivity(a)
             }
             R.id.save_button -> {
-                val b = Intent(this, GridViewActivity::class.java)
+                val b = Intent(this, SavedCircuitsActivity::class.java)
                 startActivity(b)
             }
             R.id.create_button -> {

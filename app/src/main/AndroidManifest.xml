@@ -36,10 +36,15 @@
             android:exported="false"
             android:screenOrientation="landscape">
         </activity>
-        <activity 
-            android:name=".GridViewActivity" 
+        <activity
+            android:name=".GridViewActivity"
             android:exported="false"
             android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".SavedCircuitsActivity"
+            android:exported="false"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

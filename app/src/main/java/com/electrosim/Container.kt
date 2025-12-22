@@ -1,6 +1,7 @@
 package com.electrosim
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -618,6 +619,70 @@ open class Container : SurfaceView, SurfaceHolder.Callback {
             }
             longPressHandler.removeCallbacks(longPressRunnable)
             longPressHandler.removeCallbacks(breakpointLongPressRunnable)
+        }
+    }
+
+    // Methods for circuit serialization
+    fun getElements(): List<ElementInterface> = synchronized(mElements) { mElements.toList() }
+    fun getConnectors(): List<ConnectorInterface> = synchronized(mElements) { mConnectors.toList() }
+
+    /**
+     * Capture the current circuit as a bitmap for thumbnail generation
+     */
+    fun captureCircuitBitmap(): Bitmap? {
+        return try {
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+
+            // Draw circuit without UI elements (delete mode glow, etc.)
+            val savedDelFlag = delflag
+            delflag = false
+            doDraw(canvas)
+            delflag = savedDelFlag
+
+            bitmap
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    /**
+     * Clear all elements and connectors from the canvas
+     */
+    fun clearCircuit() {
+        synchronized(mElements) {
+            // Clear all connector references from ports
+            for (connector in mConnectors) {
+                try {
+                    connector.getLinkPointA().setConnector(null)
+                    connector.getLinkPointB().setConnector(null)
+                } catch (_: IllegalStateException) {
+                    // Port not initialized, skip
+                }
+            }
+            mConnectors.clear()
+            mElements.clear()
+
+            // Reset UI state
+            currentElement = null
+            tempLinkPoint = null
+            newConnector = null
+            connectionModeElement = null
+            showConnectButton = false
+            longPressElement = null
+            draggingBreakpoint = null
+        }
+    }
+
+    /**
+     * Load elements and connectors into the canvas
+     */
+    fun loadCircuit(elements: List<ElementInterface>, connectors: List<ConnectorInterface>) {
+        synchronized(mElements) {
+            clearCircuit()
+            mElements.addAll(elements)
+            mConnectors.addAll(connectors)
         }
     }
 } 

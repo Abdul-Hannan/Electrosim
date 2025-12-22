@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="80dp"
+    android:height="60dp"
+    android:viewportWidth="80"
+    android:viewportHeight="60">
+
+    <!-- Background -->
+    <path
+        android:fillColor="#333333"
+        android:pathData="M0,0h80v60H0z" />
+
+    <!-- Simple circuit representation -->
+    <!-- AND gate shape -->
+    <path
+        android:fillColor="#666666"
+        android:pathData="M25,20 L35,20 Q45,20 45,30 Q45,40 35,40 L25,40 Z" />
+
+    <!-- Input lines -->
+    <path
+        android:strokeColor="#888888"
+        android:strokeWidth="2"
+        android:pathData="M10,25 L25,25" />
+    <path
+        android:strokeColor="#888888"
+        android:strokeWidth="2"
+        android:pathData="M10,35 L25,35" />
+
+    <!-- Output line -->
+    <path
+        android:strokeColor="#888888"
+        android:strokeWidth="2"
+        android:pathData="M45,30 L60,30" />
+
+    <!-- LED circle -->
+    <path
+        android:fillColor="#555555"
+        android:pathData="M65,30 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0" />
+
+</vector>
