@@ -9,6 +9,7 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.electrosim.component.*
 import com.electrosim.databinding.MainBinding
@@ -126,9 +127,9 @@ class CircuitDrawer : Activity(), View.OnClickListener {
     }
 
     private fun updateCircuitNameDisplay() {
-        binding.circuitNameLabel.text = currentCircuitName
+        findViewById<TextView>(R.id.circuit_name_label)?.text = currentCircuitName
         // Show "Saved" status if this is a saved circuit
-        binding.circuitStatus.text = if (currentCircuitId != null) "(Saved)" else ""
+        findViewById<TextView>(R.id.circuit_status)?.text = if (currentCircuitId != null) "(Saved)" else ""
     }
 
     private fun showSaveDialog() {
