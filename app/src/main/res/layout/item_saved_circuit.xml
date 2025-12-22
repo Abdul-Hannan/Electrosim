@@ -16,25 +16,44 @@
         android:scaleType="centerCrop"
         android:contentDescription="Circuit thumbnail" />
 
-    <!-- Delete Button -->
-    <ImageView
-        android:id="@+id/delete_button"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+    <!-- Action Buttons Container -->
+    <LinearLayout
+        android:id="@+id/action_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="4dp"
-        android:padding="8dp"
-        android:src="@drawable/ic_delete"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Delete circuit" />
+        android:orientation="horizontal">
+
+        <!-- Duplicate Button -->
+        <ImageView
+            android:id="@+id/duplicate_button"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="4dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_duplicate"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Duplicate circuit" />
+
+        <!-- Delete Button -->
+        <ImageView
+            android:id="@+id/delete_button"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_delete"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Delete circuit" />
+
+    </LinearLayout>
 
     <!-- Circuit Info Container -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/circuit_thumbnail"
-        android:layout_toStartOf="@id/delete_button"
+        android:layout_toStartOf="@id/action_buttons"
         android:layout_centerVertical="true"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"

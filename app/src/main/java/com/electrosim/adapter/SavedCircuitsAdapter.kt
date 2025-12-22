@@ -19,7 +19,8 @@ class SavedCircuitsAdapter(
     private val context: Context,
     private var circuits: List<CircuitData>,
     private val storageManager: CircuitStorageManager,
-    private val onDeleteClick: ((CircuitData) -> Unit)? = null
+    private val onDeleteClick: ((CircuitData) -> Unit)? = null,
+    private val onDuplicateClick: ((CircuitData) -> Unit)? = null
 ) : BaseAdapter() {
 
     private val dateFormat = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
@@ -58,6 +59,12 @@ class SavedCircuitsAdapter(
             thumbnailImageView.setImageBitmap(thumbnail)
         } else {
             thumbnailImageView.setImageResource(R.drawable.ic_circuit_placeholder)
+        }
+
+        // Set up duplicate button
+        val duplicateButton = view.findViewById<ImageView>(R.id.duplicate_button)
+        duplicateButton.setOnClickListener {
+            onDuplicateClick?.invoke(circuit)
         }
 
         // Set up delete button
